@@ -8,19 +8,20 @@ import type { FC } from "react";
 import type { RootStackParamList } from "../navigation/types";
 import { useState } from "react";
 
-type LoginScreenProps = {
-    navigation: NativeStackNavigationProp<RootStackParamList, "Login">;
+type SignupScreenProps = {
+    navigation: NativeStackNavigationProp<RootStackParamList, "Signup">;
 };
 
-const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
+const SignupScreen: FC<SignupScreenProps> = ({ navigation }) => {
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
     const validateEmail = (value: string) => /\S+@\S+\.\S+/.test(value);
 
-    const handleLogin = async () => {
-        if (!email || !password) {
+    const handleSignup = async () => {
+        if (!name || !email || !password) {
             Alert.alert("Error", "Please fill in all fields.");
             return;
         }
@@ -35,7 +36,7 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
 
         setLoading(true);
         try {
-            // ✅ Mock login success
+            // ✅ Mock signup success
             await new Promise((resolve) => setTimeout(resolve, 1500));
 
             // Save token persistently
@@ -48,7 +49,7 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
     };
 
     if (loading) {
-        return <Loader message="Logging in..." />;
+        return <Loader message="Creating account..." />;
     }
 
     return (
@@ -56,10 +57,17 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
             behavior={Platform.OS === "ios" ? "padding" : undefined}
             className="flex-1 bg-gray-50"
         >
-            <Header title="Login" subtitle="Access your smart cleaning robot" />
+            <Header title="Sign Up" subtitle="Create your robot account" />
 
             <View className="flex-1 items-center justify-center px-6">
                 <View className="w-full bg-white rounded-2xl p-6 shadow-md border border-gray-200">
+                    <TextInput
+                        placeholder="Name"
+                        autoCapitalize="words"
+                        value={name}
+                        onChangeText={setName}
+                        className="border border-gray-300 rounded-xl p-3 mb-4 bg-gray-50"
+                    />
                     <TextInput
                         placeholder="Email"
                         keyboardType="email-address"
@@ -76,10 +84,10 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
                         onChangeText={setPassword}
                         className="border border-gray-300 rounded-xl p-3 mb-6 bg-gray-50"
                     />
-                    <Button title="Login" onPress={handleLogin} />
+                    <Button title="Sign Up" onPress={handleSignup} />
                     <Button
-                        title="Create Account"
-                        onPress={() => navigation.navigate("Signup")}
+                        title="Back to Login"
+                        onPress={() => navigation.navigate("Login")}
                         variant="secondary"
                     />
                 </View>
@@ -88,4 +96,4 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
     );
 };
 
-export default LoginScreen;
+export default SignupScreen;
